@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // Create axios instance with base URL
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -32,7 +32,7 @@ api.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+      window.location.href = '/auth';
     }
     return Promise.reject(error);
   }
@@ -40,32 +40,38 @@ api.interceptors.response.use(
 
 // Post API services
 export const postService = {
-  // Get all posts with optional pagination and filters
-  getAllPosts: async (page = 1, limit = 10, category = null) => {
+  // Get all posts with optional pagination, filters and search
+  getAllPosts: async (page = 1, limit = 10, category = null, search = null) => {
     let url = `/posts?page=${page}&limit=${limit}`;
-    if (category) {
+    if (category && category !== 'all') {
       url += `&category=${category}`;
     }
+    if (search) {
+      url += `&search=${encodeURIComponent(search)}`;
+    }
     const response = await api.get(url);
-    return response.data;
+    return {
+      data: response.data.data || [],
+      pagination: response.data.pagination || null
+    };
   },
 
   // Get a single post by ID or slug
   getPost: async (idOrSlug) => {
     const response = await api.get(`/posts/${idOrSlug}`);
-    return response.data;
+    return response.data.data;
   },
 
   // Create a new post
   createPost: async (postData) => {
     const response = await api.post('/posts', postData);
-    return response.data;
+    return response.data.data;
   },
 
   // Update an existing post
   updatePost: async (id, postData) => {
     const response = await api.put(`/posts/${id}`, postData);
-    return response.data;
+    return response.data.data;
   },
 
   // Delete a post
@@ -85,6 +91,31 @@ export const postService = {
     const response = await api.get(`/posts/search?q=${query}`);
     return response.data;
   },
+
+  // Upload image
+  uploadImage: async (imageFile) => {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    const response = await api.post('/posts/upload-image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data.data;
+  },
+
+  // Get comments for a post
+  getComments: async (postId) => {
+    const response = await api.get(`/posts/${postId}/comments`);
+    return response.data.data || [];
+  },
+
+  // Add comment to a post
+  addComment: async (postId, content) => {
+    const response = await api.post(`/posts/${postId}/comments`, { content });
+    return response.data.data;
+  },
 };
 
 // Category API services
@@ -92,13 +123,13 @@ export const categoryService = {
   // Get all categories
   getAllCategories: async () => {
     const response = await api.get('/categories');
-    return response.data;
+    return response.data.data || [];
   },
 
   // Create a new category
   createCategory: async (categoryData) => {
     const response = await api.post('/categories', categoryData);
-    return response.data;
+    return response.data.data;
   },
 };
 

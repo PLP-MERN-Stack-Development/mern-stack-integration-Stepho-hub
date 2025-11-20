@@ -41,8 +41,30 @@ mern-blog/
 
 1. Accept the GitHub Classroom assignment invitation
 2. Clone your personal repository that was created by GitHub Classroom
-3. Follow the setup instructions in the `Week4-Assignment.md` file
-4. Complete the tasks outlined in the assignment
+3. Install server dependencies:
+   ```
+   cd server
+   npm install
+   ```
+4. Install client dependencies:
+   ```
+   cd client
+   npm install
+   ```
+5. Set up environment variables:
+   - Copy `server/.env.example` to `server/.env` and update the values
+   - Copy `client/.env.example` to `client/.env` if needed
+6. Start MongoDB (ensure it's running on localhost:27017)
+7. Start the development servers:
+   ```
+   # In the server directory
+   npm run dev
+
+   # In the client directory (new terminal)
+   npm run dev
+   ```
+8. Follow the setup instructions in the `Week4-Assignment.md` file
+9. Complete the tasks outlined in the assignment
 
 ## Files Included
 

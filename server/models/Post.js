@@ -20,7 +20,6 @@ const PostSchema = new mongoose.Schema(
     },
     slug: {
       type: String,
-      required: true,
       unique: true,
     },
     excerpt: {
@@ -40,7 +39,7 @@ const PostSchema = new mongoose.Schema(
     tags: [String],
     isPublished: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     viewCount: {
       type: Number,
@@ -52,9 +51,16 @@ const PostSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User',
         },
+        name: {
+          type: String,
+          trim: true,
+          maxlength: [100, 'Name cannot be more than 100 characters'],
+        },
         content: {
           type: String,
           required: true,
+          trim: true,
+          maxlength: [500, 'Comment cannot be more than 500 characters'],
         },
         createdAt: {
           type: Date,
