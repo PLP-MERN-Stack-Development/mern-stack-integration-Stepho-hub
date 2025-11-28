@@ -1,7 +1,7 @@
 {
   "name": "mern-blog-application",
   "version": "1.0.0",
-  "description": "Full-stack MERN blog application with modern UI and comprehensive features",
+  "description": "Full-stack MERN blog application with modern UI and comprehensive features - Railway deployment ready",
   "main": "server/server.js",
   "scripts": {
     "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
