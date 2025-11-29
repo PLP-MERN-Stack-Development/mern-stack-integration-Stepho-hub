@@ -4,14 +4,11 @@ import axios from 'axios';
 
 // Get API base URL based on environment
 const getApiBaseUrl = () => {
-  // Check for environment-specific API URL
+  // Check for environment-specific API URL (for Vercel/Render deployments)
   if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
-  }
-
-  // For production deployments, use the current origin + /api
-  if (import.meta.env.PROD) {
-    return `${window.location.origin}/api`;
+    // Ensure it ends with /api for proper API routing
+    const baseUrl = import.meta.env.VITE_API_URL;
+    return baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`;
   }
 
   // For development, use the default proxy path
