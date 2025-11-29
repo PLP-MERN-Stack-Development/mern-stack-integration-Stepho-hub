@@ -1,13 +1,5 @@
 {
-  "version": 2,
-  "buildCommand": "cd client && npm install && npm run build",
+  "buildCommand": "cd client && npm run build",
   "outputDirectory": "client/dist",
-  "installCommand": "cd client && npm install",
-  "framework": null,
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/client/dist/$1"
-    }
-  ]
+  "installCommand": "cd client && npm install"
 }
